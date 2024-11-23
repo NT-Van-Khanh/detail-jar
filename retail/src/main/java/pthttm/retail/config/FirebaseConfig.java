@@ -20,9 +20,6 @@ public class FirebaseConfig {
         try{
 //            FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase/firebase-key.json");
             InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream("firebase/firebase-key.json");
-            if (serviceAccount == null) {
-                throw new FileNotFoundException("Firebase key file not found in resources");
-            }
             FirebaseOptions options = new FirebaseOptions.Builder().
                     setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
             if(FirebaseApp.getApps().isEmpty()){
@@ -32,6 +29,11 @@ public class FirebaseConfig {
         } catch (IOException e) {
             throw new RuntimeException("Failed to initialize Firebase", e);
         }
+    }
+
+    @Bean
+    public FirebaseApp firebaseApp() {
+        return FirebaseApp.getInstance();
     }
 
 }

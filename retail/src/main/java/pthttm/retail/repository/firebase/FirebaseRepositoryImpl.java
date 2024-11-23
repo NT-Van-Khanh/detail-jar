@@ -1,7 +1,9 @@
 package pthttm.retail.repository.firebase;
 
 import com.google.cloud.storage.Blob;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.cloud.StorageClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.ByteArrayInputStream;
@@ -13,8 +15,12 @@ import java.nio.charset.StandardCharsets;
 @Repository
 public class FirebaseRepositoryImpl implements FirebaseRepository {
 
-    private final StorageClient storageClient = StorageClient.getInstance();
+    private final StorageClient storageClient;
 
+    @Autowired
+    public FirebaseRepositoryImpl(FirebaseApp firebaseApp) {
+        this.storageClient = StorageClient.getInstance(firebaseApp);
+    }
     @Override
     public String getObjectUrl(String bucketName, String fileName) throws IOException{
         Blob blob = storageClient.bucket(bucketName).get(fileName);
